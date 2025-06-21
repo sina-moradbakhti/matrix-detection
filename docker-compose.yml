@@ -31,4 +31,4 @@ services:
 
 networks:
   server-network:
-    external: true
+    driver: bridge
