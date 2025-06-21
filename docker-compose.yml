@@ -13,14 +13,22 @@ services:
       - ./outputs:/app/outputs
     restart: unless-stopped
     networks:
-      - app-network
+      - server-network
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 networks:
-  app-network:
-    driver: bridge
+  server-network:
+    external: true

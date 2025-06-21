@@ -1,0 +1,64 @@
+roject # Alternative: Add this service to your existing mexlefirst-backend docker-compose.yml
+# This shows how to integrate the datamatrix service into your existing setup
+
+version: '3.8'
+
+services:
+  # Your existing services
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./uploads:/app/uploads
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db-mongo
+    networks:
+      - server-network
+
+  db-mongo:
+    container_name: db-mongo
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+    networks:
+      - server-network
+
+  # ADD THIS: Datamatrix Detection Service
+  datamatrix-service:
+    build:
+      context: ../test-2dd  # Adjust path to your datamatrix service directory
+      dockerfile: Dockerfile
+    container_name: datamatrix-service
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./datamatrix-uploads:/app/uploads
+      - ./datamatrix-outputs:/app/outputs
+    restart: unless-stopped
+    networks:
+      - server-network
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  mongo-data:
+
+networks:
+  server-network:
