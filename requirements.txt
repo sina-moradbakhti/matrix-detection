@@ -1,0 +1,8 @@
+flask==2.0.1
+opencv-python==4.5.3.56
+pyzbar==0.1.8
+pylibdmtx==0.1.9
+matplotlib==3.4.3
+numpy==1.21.2
+werkzeug==2.0.1
+requests==2.25.1

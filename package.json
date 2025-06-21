@@ -1,0 +1,13 @@
+{
+  "name": "datamatrix-detection-client",
+  "version": "1.0.0",
+  "description": "Client for 2D Datamatrix Detection Service",
+  "main": "test-client.js",
+  "scripts": {
+    "test": "node test-client.js"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "form-data": "^4.0.0"
+  }
+}
